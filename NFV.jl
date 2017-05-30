@@ -57,6 +57,7 @@ type VNF
     rho::Float64 # normalized residual rate
     sigma::Float64 # exact number of machines needed
     m::Vector{Int64} # number of running instances
+    m0::Int64 # number of instances always kept on
     
     # Delay
     delay::Vector{Float64} # delay for passing through the function
@@ -106,7 +107,8 @@ type VNF
                 ns,       # ns
                 rho,      # rho
                 sigma,    # sigma
-                zeros(Int, N), #m
+    zeros(Int, N), # m
+    0, # m0
     zeros(N), # delay
     Delta/(1-rho), # Tbar
     Inf, # qmax
