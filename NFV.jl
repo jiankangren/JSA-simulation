@@ -59,8 +59,8 @@ type VNF
     m::Vector{Int64} # number of running instances
     m0::Int64 # number of instances always kept on
     
-    # Delay
-    delay::Vector{Float64} # delay for passing through the function
+    # # Delay
+    # delay::Vector{Float64} # delay for passing through the function
 
     # Constants used for solving the optimization problem
     Tbar::Float64 # limit for when there is no more time to switch off the machine
@@ -71,16 +71,20 @@ type VNF
     
     # Variables used for the feedback-law
     T::Float64 # Optimal period for the schedule
+    Tk::Int64  # Optimal period (expressed in floor(T/dt)
     Ton::Float64 # time the extra machine should be on
     Ton_tilde::Float64 # the altered on-time for the additional machine
     Toff::Float64 # time the extra machine should be off
     ton::Float64  # absolute time when the machine should be switched on
+    tonk::Int64   # absolute time (in number of samples) that the machine should be switched on
     toff::Float64 # absolute time when the machine should be switched off
     
     qon::Float64 # desired queue-size when the machine is switched on
     steps_left::Int64 # simple counter of how many simulation steps
                       # more the additional machine should be switched
-                      # on for
+    # on for
+
+    case::String # what case this function belongs to
     
     VNF(id,
         N,
@@ -109,19 +113,22 @@ type VNF
                 sigma,    # sigma
     zeros(Int, N), # m
     0, # m0
-    zeros(N), # delay
+    # zeros(N), # delay
     Delta/(1-rho), # Tbar
     Inf, # qmax
     Inf, # acost
     Inf, # delta
-    0, # T
-    0, # Ton
-    0, # Ton_tilde
-    0, # Toff
-    0, # ton
-    0, # toff
-    0, # qon
-    0) # steps_left
+    0.0, # T
+    0.0, # Tk
+    0.0, # Ton
+    0.0, # Ton_tilde
+    0.0, # Toff
+    0.0, # ton
+    0, # tonk
+    0.0, # toff
+    0.0, # qon
+    0,   # steps_left
+    "")  # case 
     
     
 
