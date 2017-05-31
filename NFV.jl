@@ -70,12 +70,12 @@ type VNF
     
     
     # Variables used for the feedback-law
-    T::Int64 # Optimal period for the schedule
-    Ton::Int64 # time the extra machine should be on
-    Ton_tilde::Int64 # the altered on-time for the additional machine
-    Toff::Int64 # time the extra machine should be off
-    ton::Int64  # absolute time when the machine should be switched on
-    toff::Int64 # absolute time when the machine should be switched off
+    T::Float64 # Optimal period for the schedule
+    Ton::Float64 # time the extra machine should be on
+    Ton_tilde::Float64 # the altered on-time for the additional machine
+    Toff::Float64 # time the extra machine should be off
+    ton::Float64  # absolute time when the machine should be switched on
+    toff::Float64 # absolute time when the machine should be switched off
     
     qon::Float64 # desired queue-size when the machine is switched on
     steps_left::Int64 # simple counter of how many simulation steps
