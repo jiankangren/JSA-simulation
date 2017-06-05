@@ -56,8 +56,9 @@ type VNF
     ns::Float64 # nominal service rate for one instance
     rho::Float64 # normalized residual rate
     sigma::Float64 # exact number of machines needed
-    m::Vector{Int64} # number of running instances
+    m::Vector{Int64} # 1 if additional machine is running
     m0::Int64 # number of instances always kept on
+    ton_changed::Bool # boolean whether the on-time was changed or not..
     
     # # Delay
     # delay::Vector{Float64} # delay for passing through the function
@@ -80,7 +81,7 @@ type VNF
     toff::Float64 # absolute time when the machine should be switched off
     
     qon::Float64 # desired queue-size when the machine is switched on
-    steps_left::Int64 # simple counter of how many simulation steps
+    steps_left::Vector{Int64} # simple counter of how many simulation steps
                       # more the additional machine should be switched
     # on for
 
@@ -113,6 +114,7 @@ type VNF
                 sigma,    # sigma
     zeros(Int, N), # m
     0, # m0
+    false, #ton_changed
     # zeros(N), # delay
     Delta/(1-rho), # Tbar
     Inf, # qmax
@@ -127,7 +129,7 @@ type VNF
     0, # tonk
     0.0, # toff
     0.0, # qon
-    0,   # steps_left
+    zeros(Int, N),   # steps_left
     "")  # case 
     
     
