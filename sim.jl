@@ -30,7 +30,7 @@ stochastic = true # if the input should be stochastic
 
 # if the functions should use feedback to compute the necessary
 # on-time
-feedback = true
+feedback = false
 
 dt = 1e-3
 tend = 300
@@ -40,7 +40,7 @@ N = length(t)
 deadline_violation = SharedArray(Float64, M, N)
 input = zeros(N)
 
-for sim = 1:M
+@parallel for sim = 1:M
 
     @show sim
     # ------------------------------------------------------------
