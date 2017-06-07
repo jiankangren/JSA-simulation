@@ -189,7 +189,7 @@ input = zeros(N)
     else
         FG[1].ton = FG[1].qmax/(r - FG[1].m0*FG[1].ns)
     end
-    
+    NFV.qon!(F0,FG[1])
     if length(FG) > 1
         for i in 2:length(FG)
             NFV.ton!(FG[i-1], FG[i])
@@ -202,7 +202,6 @@ input = zeros(N)
     # start by updating the parameters to include the period
     Tk = max(1,floor(Int,Tstar/dt))
 
-    fuck = false
     for j in 1:length(FG)
         try
             FG[j].tonk = floor(Int, FG[j].ton/dt)
