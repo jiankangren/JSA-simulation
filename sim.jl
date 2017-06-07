@@ -14,33 +14,34 @@ traffic.
 =#
 
 @everywhere include("./NFV.jl")
-# using PyPlot
+using PyPlot
 
     
 # ------------------------------------------------------------
 #          GENERATE THE FORWARDING GRAPHS
 # ------------------------------------------------------------
 
-addprocs(3-nprocs())
+m = 3 # number of functions in the chain 
 
+recreate_example = true # set to true if you wish to use the
+                         # example-chain in the paper
 
 randomness = 0.4  # the amount of randomness in the stochastic input
 stochastic = true # if the input should be stochastic
-feedback = false  # if the functions should use feedback or not
+feedback = true  # if the functions should use feedback or not
 
-dt = 1e-3 # sample time
-tend = 300 # simulation end-time
+dt = 1e-5 # sample time
+tend = 20 # simulation end-time
 t = 0:dt:tend
 N = length(t)
 
-deadline_violation = SharedArray(Float64, M, N) # vector to compute
-                                                # the probability of a
-                                                # missed deadlines
+deadline_violation = zeros(1,N) # vector to compute the probability of a
+                              # missed deadlines
+
 # ------------------------------------------------------------
 #          GENERATE THE FORWARDING GRAPHS
 # ------------------------------------------------------------
 println("initializing forwarding graph")
-m = 6 # number of functions in the chain
 
 # Deadline
 Dmax = 0.10;
@@ -80,11 +81,15 @@ ns = rand(ns_min:ns_d:ns_max, m)
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # Parameters used for the example (uncomment to run)  #!
-# r = 17                                              #!
-# Delta = [0.01 0.01]                                 #!
-# jq = [0.5 0.5]                                      #!
-# jc = [6.0 8.0]                                      #!
-# ns = [6.0 8.0]                                      #!
+if recreate_example
+    m = 2                                                 #!
+    r = 17.0                                              #!
+    Dmax = 0.02                                           #!
+    Delta = [0.01 0.01]                                   #!
+    jq = [0.5 0.5]                                        #!
+    jc = [6.0 8.0]                                        #!
+    ns = [6.0 8.0]                                        #!
+end
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -189,6 +194,8 @@ else
     FG[1].ton = FG[1].qmax/(r - FG[1].m0*FG[1].ns)
 end
 
+NFV.qon!(F0,FG[1])
+
 if length(FG) > 1
     for i in 2:length(FG)
         NFV.ton!(FG[i-1], FG[i])
@@ -237,6 +244,7 @@ else
 end
 
 sim = 1
+M = 1
 @time NFV.sim_fg!(FG, r, Tk, Dmaxk, dt, N, feedback, stochastic, M, sim, deadline_violation)
 
 
