@@ -139,11 +139,9 @@ input = zeros(N)
     # pick out the functions having less critical period than the largest possible period
     FGf = filter(x-> x.Tbar < c, FGs)
 
-    # Step 1:
     # define all points in [0,c] in which the cost function is not differentiable
     C = [0 ; map(x-> x.Tbar, FGf) ; c]
 
-    # Step 2:
     # look at the interior point for all intervals where the derivative is zero
     Cstar = []
 
@@ -155,12 +153,10 @@ input = zeros(N)
         end
     end
 
-    # Step 3:
     # find the smallest point => yields the period.
-
+    
     # investigate all the points in C and Cstar and compute the cost
     # choose the period yielding the smallest cost!
-
     append!(C, Cstar)
     J = zeros(length(C))
     for i in 1:length(C)
@@ -180,8 +176,10 @@ input = zeros(N)
         F.Toff = Tstar*(1-F.rho)    
     end
 
+    # ------------------------------------------------------------
+    #                GENERATE THE DESIRED SCHEDULE
+    # ------------------------------------------------------------
 
-    ###################################
 
     # Compute the start-times ton and queue-size at on-time
     if FG[1].rho < 1e-5
@@ -191,7 +189,7 @@ input = zeros(N)
     else
         FG[1].ton = FG[1].qmax/(r - FG[1].m0*FG[1].ns)
     end
-    
+    NFV.qon!(F0,FG[1])
     if length(FG) > 1
         for i in 2:length(FG)
             NFV.ton!(FG[i-1], FG[i])
@@ -199,18 +197,10 @@ input = zeros(N)
         end
     end
 
-    ###################################
-
-
-
-    # ------------------------------------------------------------
-    #                     SIMULATE THE SYSTEM
-    # ------------------------------------------------------------
 
     # start by updating the parameters to include the period
     Tk = max(1,floor(Int,Tstar/dt))
 
-    fuck = false
     for j in 1:length(FG)
         try
             FG[j].tonk = floor(Int, FG[j].ton/dt)
@@ -231,6 +221,11 @@ input = zeros(N)
             FG[j].ton_changed = true
         end
     end
+
+    # ------------------------------------------------------------
+    #                     SIMULATE THE SYSTEM
+    # ------------------------------------------------------------
+
 
     Dmaxk = floor(Int, Dmax/dt)
 
