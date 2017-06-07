@@ -163,8 +163,8 @@ function delta!(r, F0, F1)
 
     if (F1.m0+1)*F1.ns >= (F0.m0+1)*F0.ns && F1.m0*F1.ns >= F0.m0*F0.ns
         # Case 1a
-        F1.delta = 1/r*F1.ns*F1.rho^2*(F1.ns*(1-F1.rho) -
-        F0.ns*(1-F0.rho)) / (F0.ns*(1-F0.rho) + F1.ns*F1.rho)
+        
+        F1.delta = 1/r*F1.ns*F1.rho^2*(F1.ns*(1-F1.rho) - F0.ns*(1-F0.rho)) / (F0.ns*(1-F0.rho) + F1.ns*F1.rho)
 
     elseif (F1.m0+1)*F1.ns < (F0.m0+1)*F0.ns && F1.m0*F1.ns >= F0.m0*F0.ns
         # Case 1b
@@ -194,8 +194,8 @@ function ton!(F0, F1)
 
     if (F1.m0+1)*F1.ns >= (F0.m0+1)*F0.ns && F1.m0*F1.ns >= F0.m0*F0.ns
         # Case 1a
-        F1.ton = F0.ton + F1.T*F1.rho*(F1.ns*(1-F1.rho) -
-        F0.ns*(1-F0.rho)) / (F0.ns*(1-F0.rho) + F1.ns*F1.rho)
+        
+        F1.ton = F0.ton + F1.T*F1.rho*(F1.ns*(1-F1.rho) - F0.ns*(1-F0.rho)) / (F0.ns*(1-F0.rho) + F1.ns*F1.rho)
 
     elseif (F1.m0+1)*F1.ns < (F0.m0+1)*F0.ns && F1.m0*F1.ns >= F0.m0*F0.ns
         # Case 1b
@@ -305,8 +305,16 @@ function sim_fg!(FG, r::Float64, Tk::Int64, Dmaxk::Int64, dt::Float64, N::Int64,
                 if i > 1 && feedback
                     # we should use feedback to compute necessary on-time
                     extra_ontime = (FG[j].q[i] - FG[j].qon)/FG[j].ns
+                    println("-------------")
+                    @show i
+                    @show Tk
+                    @show FG[j].id
+                    @show FG[j].q[i]
+                    @show FG[j].qon
+                    @show extra_ontime
                 end
                 
+                # FG[j].Ton_tilde = FG[j].Ton + extra_ontime
                 FG[j].Ton_tilde = FG[j].Ton + max(extra_ontime,0.0)
                 FG[j].steps_left[i] = floor(Int, FG[j].Ton_tilde/dt)
             end
@@ -318,12 +326,11 @@ function sim_fg!(FG, r::Float64, Tk::Int64, Dmaxk::Int64, dt::Float64, N::Int64,
                 if FG[j].ton + FG[j].Ton > FG[j].T
                     FG[j].Ton_tilde = FG[j].ton + FG[j].Ton - FG[j].T
                     FG[j].steps_left[i] = floor(Int, FG[j].Ton_tilde/dt)
-                end
-                
+                end                
             end
 
             # compute the service to the queue
-            if FG[j].steps_left[i] > 1
+            if FG[j].steps_left[i] > 0
                 # the additional machine is on
                 FG[j].s[i] = (FG[j].m0+1)*FG[j].ns*dt
                 if i < N

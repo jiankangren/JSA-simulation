@@ -11,7 +11,9 @@ stochastic input or no.
 
 You can also try out the randomly generated service chains.
 
-You can run the files by starting `Julia`[https://julialang.org]
+To run a file you need to start `Julia`[https://julialang.org]. Then
+run a script as below (which will run `sim.jl`)
+
 ```
 > include("sim.jl")
 ```
