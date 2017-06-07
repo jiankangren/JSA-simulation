@@ -15,7 +15,7 @@ To run a file you need to start `Julia`[https://julialang.org]. Then
 run a script as below (which will run `sim.jl`)
 
 ```
-> include("sim.jl")
+julia> include("sim.jl")
 ```
 
 ## Recreating missed deadline probabilities
