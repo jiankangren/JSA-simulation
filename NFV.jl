@@ -305,13 +305,6 @@ function sim_fg!(FG, r::Float64, Tk::Int64, Dmaxk::Int64, dt::Float64, N::Int64,
                 if i > 1 && feedback
                     # we should use feedback to compute necessary on-time
                     extra_ontime = (FG[j].q[i] - FG[j].qon)/FG[j].ns
-                    println("-------------")
-                    @show i
-                    @show Tk
-                    @show FG[j].id
-                    @show FG[j].q[i]
-                    @show FG[j].qon
-                    @show extra_ontime
                 end
                 
                 # FG[j].Ton_tilde = FG[j].Ton + extra_ontime
