@@ -23,7 +23,7 @@ traffic.
 
 addprocs(3-nprocs())
 
-M = 1 # number of simulations to be run
+M = 5 # number of simulations to be run
 
 randomness = 0.4
 stochastic = true # if the input should be stochastic
@@ -40,7 +40,7 @@ N = length(t)
 deadline_violation = SharedArray(Float64, M, N)
 input = zeros(N)
 
-@parallel for sim = 1:M
+for sim = 1:M
 
     @show sim
     # ------------------------------------------------------------
