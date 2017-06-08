@@ -1,0 +1,62 @@
+\documentclass[border=10pt]{standalone}
+
+\newcommand{\on}{\ensuremath{\mathsf{on}}}
+\newcommand{\off}{\ensuremath{\mathsf{off}}}
+\newcommand{\gon}[1]{\ensuremath{g_{#1}^{\mathsf{on}}}}
+\newcommand{\goff}[1]{\ensuremath{g_{#1}^{\mathsf{off}}}}
+\newcommand{\qmax}[1]{\ensuremath{q_{#1}^\mathsf{max}}}
+\newcommand{\mbar}[1]{\ensuremath{\bar{m}_{#1}}}
+\newcommand{\qth}[1]{\ensuremath{\bar{q}_{#1}}}
+\newcommand{\qhat}[1]{\ensuremath{\hat{q}_{#1}}}
+\newcommand{\ns}[1]{\ensuremath{\bar{s}_{#1}}}
+\newcommand{\floor}[1]
+{\left\lfloor #1 \right\rfloor}
+\newcommand{\partder}[2]
+{\frac{\partial #1}{\partial #2}}
+\newcommand{\delay}[2]{\ensuremath{D_{#1,#2}}}
+\newcommand{\maxdelay}[2]{\ensuremath{\hat{D}_{#1,#2}}}
+
+
+\usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{xcolor}
+
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows}
+
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\begin{tikzpicture}[scale=2]
+  \begin{axis}[
+    width=10cm,
+    height=5cm,
+    xlabel={time ($s$)},
+    ylabel={$\mathbb{P}\big(\delay{1}{n}(t) > D^\mathsf{max}\big)$},
+    xmin = 0,
+    xmax = 1000,
+    ymin = 0,
+    ymax = 1,
+    legend style={at={(0.97,0.75)},anchor=east},
+    legend cell align=left,
+    ]
+    \addplot[blue!70, thin] table [col sep=tab]{feedback.txt};
+    \addlegendentry{feedback}
+    \addplot[green!70, thin] table [col sep=tab]{no_feedback.txt};
+    \addlegendentry{no feedback}
+
+  \end{axis}
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
