@@ -22,7 +22,7 @@ missed_deadline_prob = sum(deadline_violation, 1)[:]./M
 # 2. write it to a text-file
 filename = feedback ? "feedback.txt" : "no_feedback.txt"
 f = open("$(filename)", "w")
-for i in 1:10:N
+for i in 1:50:N
     write(f, "$(t[i]) \t $(missed_deadline_prob[i]) \n")
 end
 close(f)

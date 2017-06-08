@@ -34,7 +34,7 @@ stochastic = true # if the input should be stochastic
 feedback = false
 
 dt = 1e-3
-tend = 300
+tend = 1000
 t = 0:dt:tend
 N = length(t)
 
